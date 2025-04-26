@@ -12,7 +12,7 @@ This is a **simple machine learning model** using **DistilGPT-2** to predict sys
 
 ## Usage
 
-1. **Train the Model**: Run `train_model.py` with synthetic data.
+1. **Train the Model**: Run `model.py` with synthetic data.
 2. **Predict Behavior**:
     ```python
     prompt = "CPU Load: 85%, Memory: 1.5GB, Disk: 95% -> Label:"
