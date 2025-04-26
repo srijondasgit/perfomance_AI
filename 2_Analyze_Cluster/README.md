@@ -2,7 +2,7 @@
 
 This project simulates and analyzes system performance data.
 
-- We generate synthetic data for **5 clusters**, each with **25 computers**.
+- We generate synthetic data for **5 clusters**, each with **25 servers**.
 - Each entry includes a **timestamp**, **CPU**, **Memory**, and **Disk** usage, along with a **performance label**.
 
 ## What the Training Script Does
