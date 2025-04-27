@@ -1,6 +1,6 @@
 # Mini LLM (Language Model) in PyTorch
 
-This is a **minimalistic Language Model (LLM)** implemented in **PyTorch**, demonstrating key components of a Transformer-based model. It includes **tokenization**, **self-attention**, **feed-forward networks**, and a **language modeling head**. 
+This is a **minimalistic Language Model (LLM)** implemented in **PyTorch**, demonstrating key components of a Transformer-based model. It includes **tokenization**, **embedding**, **self-attention**, **feed-forward networks**, **residual connections** and a **language modeling head**. 
 
 The model is built to run on **GPU** if available, and can generate word predictions based on input sequences.
 
