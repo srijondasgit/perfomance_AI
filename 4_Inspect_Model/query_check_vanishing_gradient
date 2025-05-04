@@ -1,0 +1,60 @@
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+import matplotlib.pyplot as plt
+
+# Define deep network
+class DeepNetwork(nn.Module):
+    def __init__(self, activation='sigmoid'):
+        super(DeepNetwork, self).__init__()
+        self.layers = nn.ModuleList()
+        self.activation_fn = torch.sigmoid if activation == 'sigmoid' else F.relu
+        
+        for _ in range(20):  # Deep: 20 hidden layers
+            self.layers.append(nn.Linear(100, 100))
+        self.output = nn.Linear(100, 1)
+    
+    def forward(self, x):
+        for layer in self.layers:
+            x = self.activation_fn(layer(x))
+        return self.output(x)
+
+# Generate dummy data
+x = torch.randn(64, 100)
+y = torch.randn(64, 1)
+
+# Initialize model
+activation_type = 'sigmoid'  # Change to 'relu' for comparison
+model = DeepNetwork(activation=activation_type)
+optimizer = optim.SGD(model.parameters(), lr=0.01)
+loss_fn = nn.MSELoss()
+
+# Store gradient norms
+grad_history = {f"Layer {i+1}": [] for i in range(3)}  # First 3 layers
+
+# Training loop
+for epoch in range(30):
+    optimizer.zero_grad()
+    output = model(x)
+    loss = loss_fn(output, y)
+    loss.backward()
+    
+    # Record gradient norms
+    for i in range(3):  # Track first 3 layers
+        grad_norm = model.layers[i].weight.grad.norm().item()
+        grad_history[f"Layer {i+1}"].append(grad_norm)
+
+    optimizer.step()
+
+# Plotting
+plt.figure(figsize=(8, 5))
+for layer, grads in grad_history.items():
+    plt.plot(grads, label=layer)
+plt.title(f"Gradient Norms Over Time ({activation_type.upper()} Activation)")
+plt.xlabel("Epoch")
+plt.ylabel("Gradient Norm")
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
