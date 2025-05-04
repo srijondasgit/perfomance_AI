@@ -1,0 +1,39 @@
+import torch
+import torchvision.models as models
+from torchsummary import summary  # Optional, for cleaner layer summary
+
+# ---- Step 1: Load a pretrained model ----
+model = models.resnet18(pretrained=True)  # You can change to vgg16, resnet50, etc.
+model.eval()
+
+print("\n🔍 Loaded model: ResNet18\n")
+
+# ---- Step 2: Print model architecture ----
+print("🧱 Model architecture:\n")
+print(model)
+
+# ---- Step 3: List parameters and shapes ----
+print("\n📦 Parameters:")
+for name, param in model.named_parameters():
+    print(f"{name:40} | shape: {tuple(param.shape)}")
+
+# ---- Step 4: Count total and trainable parameters ----
+total = sum(p.numel() for p in model.parameters())
+trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+print(f"\n📊 Total parameters: {total:,}")
+print(f"🧠 Trainable parameters: {trainable:,}")
+
+# ---- Step 5: Inspect specific layers ----
+print("\n🔎 First conv layer weights shape:")
+print(model.conv1.weight.shape)
+
+print("\n🔎 Fully connected (classifier) layer:")
+print(model.fc)
+
+# ---- Step 6: Sample forward pass ----
+x = torch.randn(1, 3, 224, 224)  # Batch of 1, 3-channel image, 224x224
+with torch.no_grad():
+    output = model(x)
+
+print("\n📤 Output shape from forward pass:")
+print(output.shape)  # (1, 1000) for ImageNet classification
