@@ -1,0 +1,46 @@
+from transformers import AutoModel, AutoTokenizer, AutoConfig
+import torch
+
+# ---- Step 1: Load Model and Tokenizer ----
+model_name = "bert-base-uncased"  # Change to your model of interest
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModel.from_pretrained(model_name)
+
+print(f"\n🔍 Loaded model: {model_name}\n")
+
+# ---- Step 2: Print Model Architecture ----
+print("🧱 Model architecture:")
+print(model)
+
+# ---- Step 3: Model Configuration ----
+config = AutoConfig.from_pretrained(model_name)
+print("\n⚙️ Model configuration:")
+print(config)
+
+# ---- Step 4: List Named Parameters ----
+print("\n📦 Named parameters and shapes:")
+for name, param in model.named_parameters():
+    print(f"{name:50} | shape: {tuple(param.shape)}")
+
+# ---- Step 5: Check Embedding Layer ----
+try:
+    embedding_layer = model.embeddings
+    print("\n🔡 Embedding layer shape:")
+    print(embedding_layer.word_embeddings.weight.shape)
+except AttributeError:
+    print("\n❌ Embedding layer not found in this model type.")
+
+# ---- Step 6: Count Total & Trainable Parameters ----
+total_params = sum(p.numel() for p in model.parameters())
+trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+print(f"\n📊 Total parameters: {total_params:,}")
+print(f"🧠 Trainable parameters: {trainable_params:,}")
+
+# ---- Step 7: Sample Forward Pass ----
+text = "Transformers are amazing!"
+inputs = tokenizer(text, return_tensors="pt")
+with torch.no_grad():
+    outputs = model(**inputs)
+
+print("\n📤 Sample output from last hidden state:")
+print(outputs.last_hidden_state.shape)  # (batch_size, seq_len, hidden_size)
